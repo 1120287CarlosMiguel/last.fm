@@ -13,15 +13,16 @@ and open the template in the editor.
 .div {
     background-color: rgb(230,0,0);
     width: 300px;
-	height: 500px;
+	height: auto;
     padding: 25px;
     margin: 25px;
+	overflow:hidden;
+	clear:both;
 }
 .divSemCor {
-    width: 300px;
-	height: 500px;
-    padding: 25px;
-    margin: 25px;
+	height: 10%;
+	position: relative;
+    top:-80px;
 }
 
 .AcordiaoLargura{
@@ -113,33 +114,16 @@ border-top:4px solid #FFCDCD;
         <option>Short Option</option>
         <option>This Is A Longer Option</option>
     </select>
-    <input name="top" id="myTop"  maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
+    <input name="top" id="myTop" 
+    maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
   <input type="submit" value="Submit">
  
-<div id="accordion" >
+<div id="accordion"  class="divSemCor">
   <ul id="accordion">
     <li>
       <a href="#one"  >Example one</a>
       <div id="one" class="accordion">
         Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-    <li>
-      <a href="#two"  >Example two</a>
-      <div id="two" class="accordion">
-        Lorem ipsum dolor sit amet, consectetur adipisicing e
-      </div>
-    </li>    
-    <li>
-      <a href="#three">Example three</a>
-      <div id="three" class="accordion">
-        Lorem ipsum dolor sit amet
-      </div>
-    </li>
-    <li>
-      <a href="#4">Example three</a>
-      <div id="4" class="accordion">
-        Lorem ipsum dolor sit amet
       </div>
     </li>
   </ul>
