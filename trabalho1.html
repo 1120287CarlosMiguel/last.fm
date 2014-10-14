@@ -10,14 +10,25 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-div {
+.div {
     background-color: rgb(230,0,0);
     width: 300px;
 	height: 500px;
     padding: 25px;
     margin: 25px;
 }
+.divSemCor {
+    width: 300px;
+	height: 500px;
+    padding: 25px;
+    margin: 25px;
+}
+
+.AcordiaoLargura{
+	width: 250px;
+}
 p{
+	
     padding: 10px 5px; 
     background: #dddddd;
     width: 300px;
@@ -47,19 +58,93 @@ select {
     appearance:none;
     cursor:pointer;
 }
-</style>
+
+
+/* Acordiao*/
+
+/*  Basic stucture
+=====================*/
+#accordion{margin:100px auto;width:280px;}
+#accordion ul{list-style:none;margin:0;padding:0;}
+.accordion{display:none;}
+.accordion:target{display:block;}
+#accordion ul li a{text-decoration:none;display:block;padding:10px;}
+.accordion{padding:4px;}
+
+
+
+
+
+/*  Colors 
+====================*/
+#accordion ul{
+/*box-shadow*/
+-webkit-box-shadow:0 4px 5px #BDBDBD;
+   -moz-box-shadow:0 4px 5px #BDBDBD;
+        box-shadow:0 4px 5px #BDBDBD;
+/*border-radius*/
+-webkit-border-radius:5px;
+   -moz-border-radius:5px;
+        border-radius:5px;
+}
+#accordion ul li a{
+	background: #fff;
+	border-bottom: 1px solid #E0E0E0;
+	color: #999;
+	width: 280px;
+}
+.accordion{
+	width:280px;
+background:#fdfdfd;
+color:#999;
+}
+.accordion:target{
+border-top:4px solid #FFCDCD;
+}
+
+        </style>
     </head>
-    <body><div>
-    <p align="center"><img src="lastfm_logo@2x.png" alt=""/></p>
+    <body><div class="div">
+    <p align="center"><img src="../Pictures/lastfm_logo@2x.png" alt=""/></p>
     
     <p align="center"><input type="search" id="mySearch" placeholder="Artist"><input type="submit" value="Submit"></p>
-    <p align="left" ><select name="select" id="mySelect">
+    <p align="center" ><select name="select" id="mySelect">
     	<option selected> Select Box </option>
         <option>Short Option</option>
         <option>This Is A Longer Option</option>
     </select>
-    
-    </p>
+    <input name="top" id="myTop"  maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
+  <input type="submit" value="Submit">
+ 
+<div id="accordion" >
+  <ul id="accordion">
+    <li>
+      <a href="#one"  >Example one</a>
+      <div id="one" class="accordion">
+        Lorem ipsum dolor sit amet, conse
+      </div>
+    </li>
+    <li>
+      <a href="#two"  >Example two</a>
+      <div id="two" class="accordion">
+        Lorem ipsum dolor sit amet, consectetur adipisicing e
+      </div>
+    </li>    
+    <li>
+      <a href="#three">Example three</a>
+      <div id="three" class="accordion">
+        Lorem ipsum dolor sit amet
+      </div>
+    </li>
+    <li>
+      <a href="#4">Example three</a>
+      <div id="4" class="accordion">
+        Lorem ipsum dolor sit amet
+      </div>
+    </li>
+  </ul>
+</div>
+  	
     	
     </div>
     </body>
