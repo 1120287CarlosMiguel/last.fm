@@ -17,7 +17,7 @@
         $tagValue = $tagNode->nodeValue; 
         $tags.=$tagValue . ","; 
     } 
-    // para teste 
+    // para teste .
     echo $tags; 
 ?>
 
