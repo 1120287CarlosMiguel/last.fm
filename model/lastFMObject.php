@@ -33,4 +33,9 @@ class modelLastFM {
         
         return $listaTopTags;
     }
+    
+    function artistGetTopTagsJSON($artist) {
+        $respostaJSON = file_get_contents("http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=$artist&api_key=$this->api_key&format=json");
+        return $respostaJSON;
+    }
 }
