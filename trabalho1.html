@@ -6,156 +6,243 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Trabalho1</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <script type="text/javascript">
+
+            var xmlHttpObj = null;
+            var isPostBack = false;
+            var docPHP;
+
+            function CreateXmlHttpRequestObject( )
+            {
+
+                if (window.XMLHttpRequest)
+                {
+                    xmlHttpObj = new XMLHttpRequest()
+
+                }
+                else if (window.ActiveXObject)
+                {
+                    xmlHttpObj = new ActiveXObject("Microsoft.XMLHTTP")
+                }
+                return xmlHttpObj;
+            }
+
+            function MakeXMLHTTPCallforTag()
+            {
+                xmlHttpObj = CreateXmlHttpRequestObject();
+                var textArtist = document.getElementById("mySearch");
+                artist = textArtist.value;
+
+                // efectuar pedido Ajax ( open, registar eventHandler, send , etc)
+                if (xmlHttpObj)
+                {
+                    xmlHttpObj.open("GET", "./artist.php?artist="+artist, true);
+                    xmlHttpObj.onreadystatechange = stateHandlerForTag;
+                    xmlHttpObj.send();
+                }
+            }
+
+            function stateHandlerForTag()
+            {
+                if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200)
+                {
+                    // recebe resposta 
+                    docPHP = xmlHttpObj.responseText;
+                    
+                    var vecTags = docPHP.split(",");
+                    prencheTags(vecTags);
+                }
+            }
+            
+            function prencheTags(vecTags) {
+                
+                var selectTag = document.getElementById("selectTag");
+                selectTag.innerHTML = " ";
+                
+                var options="";
+                for(i=0;i<vecTags.length;i++) {
+                    if(i === 1) {
+                        options += "<option value=\""+vecTags[i]+"\"selected>"+vecTags[i]+"</option>" 
+                    }
+                    options += "<option value=\""+vecTags[i]+"\">"+vecTags[i]+"</option>"  
+                }
+                selectTag.innerHTML = options;
+            }
+            
+            function MakeXMLHTTPCallforTrack() {
+                xmlHttpObj = CreateXmlHttpRequestObject();
+                var selectTags = document.getElementById("selectTag");
+                var tag = selectTags.options[selectTags.selectedIndex].value;
+                
+                if(xmlHttpObj) {
+                    xmlHttpObj.open("GET","./topTrack.php/tag="+tag,true);
+                    xmlHttpObj.onreadystatechange = stateHandlerForTrack;
+                    xmlHttpObj.send();
+                }
+            }
+            
+            function stateHandlerForTrack() 
+            {
+                if(xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) 
+                {
+                    docJSON = xmlHttpObj.responseText;
+                    var listaTrack = JSON.parse(docJSON);
+                }
+            }
+
+        </script>
+
         <style>
-.div {
-    background-color: rgb(230,0,0);
-    width: 300px;
-	height: 500px;
-    padding: 15px;
-    margin: 25px;
-}
-.divSemCor {
-	width:auto;
-	height:30%;
-	overflow:scroll;
-	position: relative;
-	overflow-x: hidden;
-    top:-80px;
-}
+            .div {
+                background-color: rgb(230,0,0);
+                width: 300px;
+                height: 500px;
+                padding: 15px;
+                margin: 25px;
+            }
+            .divSemCor {
+                width:auto;
+                height:30%;
+                overflow:scroll;
+                position: relative;
+                overflow-x: hidden;
+                top:-80px;
+            }
 
 
-.AcordiaoLargura{
-	width: 250px;
-}
-p{
-	
-    padding: 10px 5px; 
-    background: #dddddd;
-    width: 300px;
-    border-radius: 25px;
-}
+            .AcordiaoLargura{
+                width: 250px;
+            }
+            p{
 
-input{
-    border-radius: 5px;
-}
+                padding: 10px 5px; 
+                background: #dddddd;
+                width: 300px;
+                border-radius: 25px;
+            }
 
-select {
-    padding:3px;
-    margin: 0;
-    -webkit-border-radius:4px;
-    -moz-border-radius:4px;
-    border-radius:4px;
-    -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
-    -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
-    box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
-    background: #f8f8f8;
-    color:#888;
-    border:none;
-    outline:none;
-    display: inline-block;
-    -webkit-appearance:none;
-    -moz-appearance:none;
-    appearance:none;
-    cursor:pointer;
-}
+            input{
+                border-radius: 5px;
+            }
 
-
-/* Acordiao*/
-
-/*  Basic stucture
-=====================*/
-#accordion{margin:100px auto;width:280px;}
-#accordion ul{list-style:none;margin:0;padding:0;}
-.accordion{display:none;}
-.accordion:target{display:block;}
-#accordion ul li a{text-decoration:none;display:block;padding:10px;}
-.accordion{padding:2px;}
+            select {
+                padding:3px;
+                margin: 0;
+                -webkit-border-radius:4px;
+                -moz-border-radius:4px;
+                border-radius:4px;
+                -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+                -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+                box-shadow: 0 3px 0 #ccc, 0 -1px #fff inset;
+                background: #f8f8f8;
+                color:#888;
+                border:none;
+                outline:none;
+                display: inline-block;
+                -webkit-appearance:none;
+                -moz-appearance:none;
+                appearance:none;
+                cursor:pointer;
+            }
 
 
+            /* Acordiao*/
+
+            /*  Basic stucture
+            =====================*/
+            #accordion{margin:100px auto;width:280px;}
+            #accordion ul{list-style:none;margin:0;padding:0;}
+            .accordion{display:none;}
+            .accordion:target{display:block;}
+            #accordion ul li a{text-decoration:none;display:block;padding:10px;}
+            .accordion{padding:2px;}
 
 
 
-/*  Colors 
-====================*/
-#accordion ul{
-/*box-shadow*/
--webkit-box-shadow:0 4px 5px #BDBDBD;
-   -moz-box-shadow:0 4px 5px #BDBDBD;
-        box-shadow:0 4px 5px #BDBDBD;
-/*border-radius*/
--webkit-border-radius:5px;
-   -moz-border-radius:5px;
-        border-radius:5px;
-}
-#accordion ul li a{
-	background: #fff;
-	border-bottom: 1px solid #E0E0E0;
-	color: #999;
-	width: 250px;
-}
-.accordion{
-	width:auto;
-background:#fdfdfd;
-color:#999;
-}
-.accordion:target{
-border-top:4px solid #FFCDCD;
-}
+
+
+            /*  Colors 
+            ====================*/
+            #accordion ul{
+                /*box-shadow*/
+                -webkit-box-shadow:0 4px 5px #BDBDBD;
+                -moz-box-shadow:0 4px 5px #BDBDBD;
+                box-shadow:0 4px 5px #BDBDBD;
+                /*border-radius*/
+                -webkit-border-radius:5px;
+                -moz-border-radius:5px;
+                border-radius:5px;
+            }
+            #accordion ul li a{
+                background: #fff;
+                border-bottom: 1px solid #E0E0E0;
+                color: #999;
+                width: 250px;
+            }
+            .accordion{
+                width:auto;
+                background:#fdfdfd;
+                color:#999;
+            }
+            .accordion:target{
+                border-top:4px solid #FFCDCD;
+            }
 
         </style>
     </head>
     <body><div class="div">
-    <p align="center"><img src="lastfm_logo@2x.png" alt=""/></p>
-    
-    <p align="center"><input type="search" id="mySearch" placeholder="Artist"><input type="submit" value="Submit"></p>
-    <p align="center" ><select name="select" id="mySelect">
-    	<option selected> Select Box </option>
-        <option>Short Option</option>
-        <option>This Is A Longer Option</option>
-    </select>
-    <input name="top" id="myTop" 
-    maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
-  <input type="submit" value="Submit">
- 
-<div id="accordion"  class="divSemCor">
-  <ul id="accordion">
-    <li>
-      <a href="#one"  >Example one</a>
-      <div id="one" class="accordion">
-        Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-    <li>
-      <a href="#4"  >Example one</a>
-      <div id="4" class="accordion">
-        Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-    <li>
-      <a href="#5"  >Example one</a>
-      <div id="5" class="accordion">
-        Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-    <li>
-      <a href="#6"  >Example one</a>
-      <div id="6" class="accordion">
-        Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-    <li>
-      <a href="#7"  >Example one</a>
-      <div id="7" class="accordion">
-        Lorem ipsum dolor sit amet, conse
-      </div>
-    </li>
-  </ul>
-</div>
-  	
-    	
-    </div>
+            <p align="center"><img src="lastfm_logo@2x.png" alt=""/></p>
+
+            <p align="center">
+                <input type="search" id="mySearch" placeholder="Artist">
+                <input type="submit" onclick="MakeXMLHTTPCallforTag()" value="Submit">
+            </p>
+            <p align="center" >
+                <select name="selectTag" id="selectTag">
+                </select>
+                <input name="top" id="selectTag" maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
+                <input type="submit" value="Submit" onclick="MakeXMLHTTPCallforTrack()">
+
+            <div id="accordion"  class="divSemCor">
+                <ul id="listTopTrack">
+                    <li>
+                        <a href="#one"  >Example one</a>
+                        <div id="one" class="accordion">
+                            Lorem ipsum dolor sit amet, conse
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#4"  >Example one</a>
+                        <div id="4" class="accordion">
+                            Lorem ipsum dolor sit amet, conse
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#5"  >Example one</a>
+                        <div id="5" class="accordion">
+                            Lorem ipsum dolor sit amet, conse
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#6"  >Example one</a>
+                        <div id="6" class="accordion">
+                            Lorem ipsum dolor sit amet, conse
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#7"  >Example one</a>
+                        <div id="7" class="accordion">
+                            Lorem ipsum dolor sit amet, conse
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+
+        </div>
     </body>
 </html>
