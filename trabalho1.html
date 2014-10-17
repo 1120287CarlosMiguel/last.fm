@@ -14,7 +14,6 @@ and open the template in the editor.
 
             var xmlHttpObj = null;
             var isPostBack = false;
-            var docPHP;
 
             function CreateXmlHttpRequestObject( )
             {
@@ -36,11 +35,10 @@ and open the template in the editor.
                 xmlHttpObj = CreateXmlHttpRequestObject();
                 var textArtist = document.getElementById("mySearch");
                 artist = textArtist.value;
-
                 // efectuar pedido Ajax ( open, registar eventHandler, send , etc)
                 if (xmlHttpObj)
                 {
-                    xmlHttpObj.open("GET", "./artist.php?artist="+artist, true);
+                    xmlHttpObj.open("GET", "./getArtist.php?artist=" + artist, true);
                     xmlHttpObj.onreadystatechange = stateHandlerForTag;
                     xmlHttpObj.send();
                 }
@@ -48,50 +46,74 @@ and open the template in the editor.
 
             function stateHandlerForTag()
             {
+                var docPHP;
                 if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200)
                 {
                     // recebe resposta 
                     docPHP = xmlHttpObj.responseText;
-                    
-                    var vecTags = docPHP.split(",");
-                    prencheTags(vecTags);
+
+                    if (docPHP) {
+                        var vecTags = docPHP.split(",");
+                        prencheTags(vecTags);
+                    } else {
+                        alert("Cantor nao encontrado");
+                    }
                 }
             }
-            
+
             function prencheTags(vecTags) {
-                
+
                 var selectTag = document.getElementById("selectTag");
                 selectTag.innerHTML = " ";
-                
-                var options="";
-                for(i=0;i<vecTags.length;i++) {
-                    if(i === 1) {
-                        options += "<option value=\""+vecTags[i]+"\"selected>"+vecTags[i]+"</option>" 
+
+                var options = "";
+                for (i = 0; i < vecTags.length; i++) {
+                    if (i === 1) {
+                        options += "<option value=\"" + vecTags[i] + "\"selected>" + vecTags[i] + "</option>"
                     }
-                    options += "<option value=\""+vecTags[i]+"\">"+vecTags[i]+"</option>"  
+                    options += "<option value=\"" + vecTags[i] + "\">" + vecTags[i] + "</option>"
                 }
                 selectTag.innerHTML = options;
             }
-            
+
             function MakeXMLHTTPCallforTrack() {
                 xmlHttpObj = CreateXmlHttpRequestObject();
                 var selectTags = document.getElementById("selectTag");
                 var tag = selectTags.options[selectTags.selectedIndex].value;
-                
-                if(xmlHttpObj) {
-                    xmlHttpObj.open("GET","./topTrack.php/tag="+tag,true);
+
+                var selectNumberTags = document.getElementById("numberTracks");
+                var numberTracks = selectNumberTags.value;
+
+                if (xmlHttpObj) {
+                    xmlHttpObj.open("GET", "./getTopTrack.php?tag="+tag+"&numberTracks="+numberTracks, true);
                     xmlHttpObj.onreadystatechange = stateHandlerForTrack;
                     xmlHttpObj.send();
                 }
             }
-            
-            function stateHandlerForTrack() 
+
+            function stateHandlerForTrack()
             {
-                if(xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200) 
+                if (xmlHttpObj.readyState == 4 && xmlHttpObj.status == 200)
                 {
-                    docJSON = xmlHttpObj.responseText;
-                    var listaTrack = JSON.parse(docJSON);
+                    docTrack = xmlHttpObj.responseText;
+                    
+                    var vecTrack = docTrack.split("<br>");
+                    prencheTopTracks(vecTrack);
                 }
+            }
+            
+            function prencheTopTracks(vecTrack) {
+                var liSong = document.getElementById("listTopTrack");
+                liSong.innerHTML = "";
+                
+                var songListHTML = "";
+                for(i=0;i<vecTrack.length;i++) {
+                    if(vecTrack[i]) {
+                        var split = vecTrack[i].split(",");
+                        songListHTML += "<li><a href=\"#"+i+"|\">"+split[0]+"</a></li>";
+                    }
+                }
+                liSong.innerHTML = songListHTML;
             }
 
         </script>
@@ -204,7 +226,7 @@ and open the template in the editor.
             <p align="center" >
                 <select name="selectTag" id="selectTag">
                 </select>
-                <input name="top" id="selectTag" maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
+                <input name="top" id="numberTracks" maxlength="3" size="1" type="number" width="10" min="0" step="1" value="10">
                 <input type="submit" value="Submit" onclick="MakeXMLHTTPCallforTrack()">
 
             <div id="accordion"  class="divSemCor">
